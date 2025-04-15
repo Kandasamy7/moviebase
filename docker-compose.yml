@@ -1,0 +1,43 @@
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    restart: always
+    environment:
+       - DB_USER=postgres
+       - DB_PASSWORD=kanda77
+       - DB_NAME=signup
+       - DB_HOST=db
+    depends_on:
+      - db
+
+  fromtemd:
+    build: ./fromtemd
+    ports:
+      - "8080:80"
+    restart: always
+    depends_on:
+      - backend
+
+  movie-db:
+    build: ./movie-db
+    ports:
+      - "9001:80"
+    restart: always
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: kanda77
+      POSTGRES_DB: signup
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

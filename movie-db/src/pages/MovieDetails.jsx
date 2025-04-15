@@ -23,13 +23,13 @@ const MovieDetails = () => {
       }
     }
     fetchMovie();
-  }, []); // Add dependency array to run only when `url` changes
+  }, [id]); // Dependency on `id`
 
   useEffect(() => {
-    if (movie && movie.title) {
-      document.title = movie.title; // Update the document title when `movie` is loaded
+    if (movie?.title) {
+      document.title = movie.title; // Update document title
     }
-  }, [movie]); // Add dependency array to run only when `movie` changes
+  }, [movie]);
 
   return (
     <main className="container">
@@ -48,42 +48,55 @@ const MovieDetails = () => {
               <h3 className="text-primary">{movie.title}</h3>
               <p className="mt-3">{movie.overview}</p>
 
-              {movie.genres ? (<p className='d-flex gap-3'>
-                {movie.genres.map((genre)=>(
-                    <span key={genre.id} className='badge bg-danger'>{genre.name}</span>
-                ))}
-              </p>) :("")}
-              <p className='mt-2'>
-                <i className='bi bi-star-fill text-warning'></i>{movie.vote_average} |
-                <i className='bi bi-people-fill text-success'></i> {movie.vote_coount} reviews
+              {movie.genres && (
+                <p className="d-flex gap-3">
+                  {movie.genres.map((genre) => (
+                    <span key={genre.id} className="badge bg-danger">{genre.name}</span>
+                  ))}
+                </p>
+              )}
+
+              <p className="mt-2">
+                <i className="bi bi-star-fill text-warning"></i> {movie.vote_average} |
+                <i className="bi bi-people-fill text-success"></i> {movie.vote_count} reviews
               </p>
 
-              <table className='table table-bordered w-30 mt-2'>
-              <tbody>
-                <tr>
+              <table className="table table-bordered w-30 mt-2">
+                <tbody>
+                  <tr>
                     <th>Runtime</th>
                     <td>{convertMinutes(movie.runtime)}</td>
-                </tr>
-                <tr>
+                  </tr>
+                  <tr>
                     <th>Budget</th>
-                    <td>{movie.budget}</td>
-                </tr>
-                <tr>
+                    <td>${new Intl.NumberFormat().format(movie.budget)}</td>
+                  </tr>
+                  <tr>
                     <th>Revenue</th>
-                    <td>{movie.revenue}</td>
-                </tr>
-                <tr>
-                    <th>Relese date</th>
+                    <td>${new Intl.NumberFormat().format(movie.revenue)}</td>
+                  </tr>
+                  <tr>
+                    <th>Release date</th>
                     <td>{movie.release_date}</td>
-                </tr>
-              </tbody></table>
-                
-                <a className='btn btn-warning' target='_blank' href={`https://www.imdb.com/title/${movie.imdb_id}/`}>View in IMDB</a>
+                  </tr>
+                </tbody>
+              </table>
+
+              {movie.imdb_id && (
+                <a
+                  className="btn btn-warning"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`https://www.imdb.com/title/${movie.imdb_id}/`}
+                >
+                  View on IMDb
+                </a>
+              )}
             </div>
           </div>
         </>
       ) : (
-        <p>Loading movie details...</p> // Display while data is being fetched
+        <p>Loading movie details...</p>
       )}
     </main>
   );

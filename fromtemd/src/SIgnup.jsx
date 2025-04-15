@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';  // <-- Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [values, setValues] = useState({
@@ -9,7 +9,7 @@ const Signup = () => {
     password: ""
   });
 
-  const navigate = useNavigate();  // <-- Initialize navigate function
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -18,13 +18,15 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/signup', values);
+      const response = await axios.post('http://localhost:3000/signup', values); // ✅ Change to /signup endpoint
       alert(response.data.message);
+      navigate('/login'); // ✅ Redirect to login after signup
     } catch (error) {
       alert('Error signing up');
       console.error(error);
     }
   };
+  
 
   return (
     <div className="flex w-full h-screen bg-blue-500 justify-center items-center p-4">
@@ -59,7 +61,6 @@ const Signup = () => {
 
           <p className="text-sm text-center mt-2">You agree to our policies</p>
 
-          {/* Redirect to Login Page */}
           <button type="button" 
             className="w-full border bg-gray-200 text-black py-2 rounded-none hover:bg-gray-300"
             onClick={() => navigate('/login')}>  

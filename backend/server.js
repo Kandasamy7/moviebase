@@ -1,3 +1,5 @@
+require('dotenv').config();  // At the top of your server file
+
 const express = require('express');
 const { Pool } = require('pg');  
 const cors = require('cors');
@@ -8,10 +10,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'signup',
-    password: 'kanda77',  // Ensure this is correct
+    user: process.env.DB_USER || 'postgres',
+    host: process.env.DB_HOST || 'db', // Use environment variable
+    database: process.env.DB_NAME || 'signup',
+    password: process.env.DB_PASSWORD || 'kanda77',
     port: 5432,
 });
 
@@ -41,7 +43,7 @@ app.post('/signup', async (req, res) => {
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
-    console.log('Login request received:', { email, password }); // Log the received email and password
+    console.log('Login request received:', { email, password });
 
     try {
         const user = await pool.query(
@@ -49,7 +51,7 @@ app.post('/login', async (req, res) => {
             [email, password]
         );
 
-        console.log('Query result:', user.rows); // Log the query result
+        console.log('Query result:', user.rows);
 
         if (user.rows.length > 0) {
             res.status(200).json({ message: 'Login successful', user: user.rows[0] });
@@ -62,6 +64,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.listen(3001, () => {
-    console.log('✅ Server is running on port 3001');
+// ✅ Start server and listen on all interfaces
+app.listen(3000, '0.0.0.0', () => {  // ✅ Allows access from phone
+    console.log('✅ Server is running on 0.0.0.0:3000');
 });

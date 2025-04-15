@@ -17,14 +17,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/login', values);
+      const response = await await axios.post('http://localhost:3000/login', values);
+      // ✅ Use IP
       alert(response.data.message);
-      window.location.href = 'http://localhost:5174/movies/popular';
+      window.location.href = 'http://localhost:9001/movies/popular';
+      // ✅ Use IP
+      // console.log('Redirecting to:', 'http://192.168.205.9:8080/movies/popular');
     } catch (error) {
       alert('Error logging in');
       console.error(error);
     }
   };
+  
 
   return (
     <div className="flex w-full h-screen bg-blue-500 justify-center items-center p-4">

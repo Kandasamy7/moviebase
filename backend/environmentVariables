@@ -1,0 +1,11 @@
+const { Pool } = require('pg');
+
+const pool = new Pool({
+    user: process.env.DB_USER || 'postgres',
+    host: process.env.DB_HOST || 'db', //  Use 'db' to connect to the Docker service
+    database: process.env.DB_NAME || 'signup', // The name of the database *within* PostgreSQL
+    password: process.env.DB_PASSWORD || 'kanda77',
+    port: 5432, //  Postgres listens on 5432 *inside* the container
+});
+
+module.exports = pool;
